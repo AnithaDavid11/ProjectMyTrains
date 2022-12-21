@@ -1,0 +1,34 @@
+{
+    "headers": {},
+    "attachments": {},
+    "body": {
+        "GetArrBoardWithDetailsResponse": {
+            "GetStationBoardResult": {
+                "generatedAt": "2022-12-01T14:51:05.8428244+00:00",
+                "locationName": "Basingstoke",
+                "crs": "BSK",
+                "filterLocationName": "London Waterloo",
+                "filtercrs": "WAT",
+                "platformAvailable": "true",
+                "trainServices": {
+                    "service": {
+                        "sta": "14:55",
+                        "eta": "On time",
+                        "platform": "3",
+                        "operator": "South Western Railway",
+                        "operatorCode": "SW",
+                        "serviceType": "train",
+                        "serviceID": "tanl9pzUh9vWeioqkPFNzQ==",
+                        "origin": {
+                            "location": {
+                                "locationName": "Exeter St Davids",
+                                "crs": "EXD"
+                            }
+                        },
+                        "destination": {
+                            "location": {
+                                "locationName": "London Waterloo",
+                                "crs": "WAT"
+                            }
+                        }
+                    }}}}}}

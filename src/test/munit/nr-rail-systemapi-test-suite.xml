@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="nr-rail-systemapi-test-suite.xml" />
+	<munit:test name="nr-rail-systemapi-test-suite-nr-rail-systemapi-mainTest" doc:id="b0c72e06-215b-41ed-9a93-565c29e79e19" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="84ceb83a-65da-4420-8101-2608454fa8d9" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="nr-rail-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to nr-rail-systemapi-main" doc:id="01a66206-b6da-47a5-97bc-6f19db68c260" name="nr-rail-systemapi-main"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="nr-rail-systemapi-test-suite-nr-rail-systemapi-consoleTest" doc:id="f669732e-6576-466f-bfc2-e7c69a6e104b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="508a9a8b-0628-4e3d-98ee-208d92b23db9" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="nr-rail-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to nr-rail-systemapi-console" doc:id="9e92ab00-e942-4d6e-9c03-f2a4a11d317f" name="nr-rail-systemapi-console"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="nr-rail-systemapi-test-suite-post:\getarrivalboard:application\json:nr-rail-systemapi-configTest" doc:id="8ee1175c-43f3-46ff-8ef8-810bcba4eece" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="54fa2679-eeba-418f-894b-40c063615e6b" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Flow Reference to railpocFlow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f90e2fdb-baa0-47d2-a0eb-617c6c5cf436" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="railpocFlow" attributeName="name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\getarrivalboard:application\json:nr-rail-systemapi-config" doc:id="57d688a8-6905-4075-aedf-f5fad7e39576" name="post:\getarrivalboard:application\json:nr-rail-systemapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="nr-rail-systemapi-test-suite-post:\getarrivalboard:application\json:nr-rail-systemapi-configTest1" doc:id="09ff7c79-afe5-41b7-927b-cdc09969b342" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="76f4dc35-450f-456b-9e07-8c1cb3c4beea" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Flow Reference to railpocFlow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f90e2fdb-baa0-47d2-a0eb-617c6c5cf436" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="railpocFlow" attributeName="name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="ANY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="c8c04a61-4919-4082-b5c7-dec4aa97d096" >
+				<flow-ref doc:name="Flow-ref to post:\getarrivalboard:application\json:nr-rail-systemapi-config" doc:id="82be966a-b447-4f54-895c-b7f5668c7ad0" name="post:\getarrivalboard:application\json:nr-rail-systemapi-config" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="54981e23-3b6f-4b24-8a36-d01758c81c07" >
+						<logger level="INFO" doc:name="Logger" doc:id="57324e05-623f-4314-b0df-dae65dbb04a8" message="Continue"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="4d47a794-582c-437d-9396-b30e59fd54ca" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

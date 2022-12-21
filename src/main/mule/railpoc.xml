@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<flow name="railpocFlow" doc:id="0b0e3572-ad5e-4103-995b-91c6f34420cc" >
+		<json-logger:logger doc:name="Start Logger" doc:id="a41e833f-d027-4573-be04-668f4462b969" config-ref="JSON_Logger_Config" message="Start Logger" />
+		<ee:transform doc:name="transform payload to xm to consume soap service" doc:id="2d1a6fe0-8336-4dd7-afc6-092ce988be83" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://thalesgroup.com/RTTI/2017-10-01/ldb/
+---
+{
+	ns0#GetArrBoardWithDetailsRequest: {
+		ns0#numRows: payload.numRows,
+		ns0#crs: payload.crs,
+		ns0#filterCrs: payload.filterCrs,
+		ns0#filterType: payload.filterType,
+		ns0#timeOffset: payload.timeOffset,
+		ns0#timeWindow: payload.timeWindow
+	}
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="GetArrBoardWithDetails" doc:name="Consume NRSOAP service" doc:id="970a4929-7a96-4e5c-9d52-4e4eb5dd0b76" config-ref="Web_Service_Consumer_Config" >
+			<wsc:message >
+				<wsc:headers ><![CDATA[#[output application/xml
+ns ns0 http://thalesgroup.com/RTTI/2013-11-28/Token/types
+---
+{
+	headers: {
+		ns0#AccessToken: {
+				TokenValue: "86cdc061-3f79-46b1-aee9-b1cccfd4ef5f"
+			}
+		
+	}
+}]]]></wsc:headers>
+			</wsc:message>
+		</wsc:consume>
+		<json-logger:logger doc:name="Logger before transform message" doc:id="5877ee60-0c6c-48d4-a897-56e53945481c" config-ref="JSON_Logger_Config" message="Logger before transform message" tracePoint="BEFORE_TRANSFORM" />
+		<ee:transform doc:name="Transform Message" doc:id="e11af3c4-e619-4cd3-97ed-b338de53cd87" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="End Logger" doc:id="c272397b-6e39-41e3-b960-6e54767ae53e" config-ref="JSON_Logger_Config" message="End Logger" tracePoint="END" />
+	</flow>
+</mule>

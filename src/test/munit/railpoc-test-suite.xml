@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="railpoc-test-suite.xml" />
+	<munit:test name="railpoc-test-suite-railpocFlowTest" doc:id="6ce0dff0-dd9f-4274-8b43-c7bb88c09869" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="f12a3a55-9fbb-49c6-a94b-39cc3890a5ff" processor="wsc:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GetArrBoardWithDetails" attributeName="operation" />
+					<munit-tools:with-attribute whereValue="Consume NRSOAP service" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="970a4929-7a96-4e5c-9d52-4e4eb5dd0b76" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Web_Service_Consumer_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="50ff8a2c-650a-4263-9ea7-d6c0d417442a" >
+				<munit:payload value='#[{&#10;"numRows": 40,&#10;"crs": "BSK",&#10;"filterCrs" :"WAT",&#10;"filterType": "to",&#10;"timeOffset": 0,&#10;"timeWindow": 120&#10;}&#10;]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to railpocFlow" doc:id="53cfecd7-7a91-4b1e-ae96-a38870313ab3" name="railpocFlow"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="5b44401f-809d-4558-8c16-0e3ab55e3fc1" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

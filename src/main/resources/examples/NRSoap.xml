@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="">
+  <para>&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:typ="http://thalesgroup.com/RTTI/2013-11-28/Token/types" xmlns:ldb="http://thalesgroup.com/RTTI/2017-10-01/ldb/"&gt;</para>
+  <para>   &lt;soapenv:Header&gt;</para>
+  <para>      &lt;typ:AccessToken&gt;</para>
+  <para>         &lt;typ:TokenValue&gt;86cdc061-3f79-46b1-aee9-b1cccfd4ef5f&lt;/typ:TokenValue&gt;</para>
+  <para>      &lt;/typ:AccessToken&gt;</para>
+  <para>   &lt;/soapenv:Header&gt;</para>
+  <para>   &lt;soapenv:Body&gt;</para>
+  <para>      &lt;ldb:GetArrBoardWithDetailsRequest&gt;</para>
+  <para>         &lt;ldb:numRows&gt;40&lt;/ldb:numRows&gt;</para>
+  <para>         &lt;ldb:crs&gt;BSK&lt;/ldb:crs&gt;</para>
+  <para>         &lt;!--Optional:--&gt;</para>
+  <para>         &lt;ldb:filterCrs&gt;WAT&lt;/ldb:filterCrs&gt;</para>
+  <para>         &lt;!--Optional:--&gt;</para>
+  <para>         &lt;ldb:filterType&gt;to&lt;/ldb:filterType&gt;</para>
+  <para>         &lt;!--Optional:--&gt;</para>
+  <para>         &lt;ldb:timeOffset&gt;0&lt;/ldb:timeOffset&gt;</para>
+  <para>         &lt;!--Optional:--&gt;</para>
+  <para>         &lt;ldb:timeWindow&gt;120&lt;/ldb:timeWindow&gt;</para>
+  <para>      &lt;/ldb:GetArrBoardWithDetailsRequest&gt;</para>
+  <para>   &lt;/soapenv:Body&gt;</para>
+  <para>&lt;/soapenv:Envelope&gt;</para>
+</article>

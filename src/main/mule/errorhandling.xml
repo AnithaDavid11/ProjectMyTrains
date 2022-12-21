@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
+	<error-handler name="errorhandlingError_Handler" doc:id="f2507dcf-2ae0-405c-a39c-79d1947932e2" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1e9ed24a-098e-453f-b3bc-13ed066b624b" type="ANY">
+			<ee:transform doc:name="Create incident" doc:id="dab08f7a-27c2-40cf-b313-7d68776140a3" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.service-now.com/incident
+---
+{
+	ns0#insert: {
+		caller_id: "anithad11.28@gmail.com",
+		comments: "Please check the errors",
+		short_description: "Error in flows",
+		state: "New"
+	}
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<servicenow:invoke service="incident" operation="insert" doc:name="Invoke" doc:id="55007393-3184-42d4-a5c8-345816f0ef23" config-ref="ServiceNow_Config" showReferenceValues="ALL" />
+			<ee:transform doc:name="Transforming Message to json" doc:id="eb6dd720-b1af-4a09-9f05-f54fbd2ee74e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+ns ns0 http://www.service-now.com/incident
+output application/json
+---
+{
+	"Message" : "Error occured.Check in servicenow" ,
+	"Payload" : payload
+	
+	}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a4e61533-8905-409f-ad43-ba9109bcfd9b" type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<ee:transform doc:name="Transform Message" doc:id="1d8f457a-410c-41e6-ba58-94d5bb2bf964" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"MESSAGE":"UNSUPPORTED MEDIA TYPE"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="069d6815-2433-4c5b-bbfa-4e34aecee083" type="APIKIT:NOT_IMPLEMENTED">
+			<ee:transform doc:name="Transform Message" doc:id="57252804-ffd6-4c6a-883a-7a0f710dca2c" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"MESSAGE" : "NOT IMPLEMENTED"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
+	</error-handler>
+	</mule>

@@ -1,0 +1,28 @@
+#%RAML 1.0
+title: NR-Rail-SystemAPI
+description: " This API is for Rail services "
+traits:
+   error: !include exchange_modules/0bb8c408-0feb-47de-9914-f4d45820596c/errorcodes/1.0.0/errorcodes.raml
+
+types:
+  requestsoap: !include SoapRequestdataType.raml
+  
+
+/getarrivalboard:
+  post:
+   description : " Getting SOAP request"
+   is:
+     - error
+   body:
+      application/json:
+        type: requestsoap
+   responses:
+     201:
+       description: "Success Response for SOAP request"
+       body:
+         application/json:
+           example : !include soapschemaresponse.json
+          
+
+
+  

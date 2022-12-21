@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="3b4c4f1e-8d48-4787-acb5-0ce53528b81c" environment="${mule.env}" />
+	<apikit:config outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" doc:name="Router" doc:id="7a5c7d48-8535-40b9-abd3-0936dc8b0080" name="nr-rail-systemapi-config" api="nr-rail-systemapi.raml" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5c83ed64-f74f-4d85-95f9-2f345b093ad5" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="6aeb2725-5277-4c41-8476-abb6bec33bcf" file="log.properties" />
+	<servicenow:config name="ServiceNow_Config" doc:name="ServiceNow Config" doc:id="01a35bdf-f92b-4974-94fe-3ca238c5493b" >
+		<servicenow:basic-connection username="admin" password="${secure::service.password}" serviceAddress="https://dev144027.service-now.com" serviceNowVersion="PARIS" />
+	</servicenow:config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e1a1e6ee-9fda-4d76-b26c-a40a6c381751" file="${mule-env}-config.yaml" key="${key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<global-property doc:name="Global Property" doc:id="6524771d-1392-4a48-abd3-d03177a5b2d5" name="key" value="servicenow" />
+	<global-property doc:name="Global Property" doc:id="65cbfdae-041d-4b36-9488-573d1d2dda15" name="mule-env" value="dev" />
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="06a0315d-0137-441d-90da-1a2b1f8dce59" >
+		<wsc:connection wsdlLocation="https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2017-10-01" service="ldb" port="LDBServiceSoap" address="https://lite.realtime.nationalrail.co.uk/OpenLDBWS/ldb11.asmx" />
+	</wsc:config>
+	<api-gateway:autodiscovery apiId="18369503" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="58e34992-55d6-469e-bf14-c5c92cf42138" flowRef="nr-rail-systemapi-main"/>
+</mule>
